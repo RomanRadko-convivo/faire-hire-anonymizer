@@ -1,0 +1,22 @@
+[
+  "Android", "Kotlin", "Java", "Swift", "Dart", "Flutter", "Jetpack Compose",
+  "Jetpack", "Hilt", "Room", "Retrofit", "LiveData", "Coroutines",
+  "Kotlin Coroutines", "Xcode", "UIKit", "SwiftUI", "GetX", "Gradle",
+  "Artifactory", "Artifactory CI", "Firebase", "Firestore",
+
+  "React", "Angular", "Vue", "Node", "TypeScript", "JavaScript", "Django",
+  "Flask", "FastAPI", "Spring", "Rails", "Laravel", "GraphQL", "Redux",
+  "Next.js", "Express",
+
+  "Docker", "Kubernetes", "Terraform", "Ansible", "Jenkins",
+  "GitHub Actions", "GitLab CI", "Prometheus", "Grafana",
+
+  "Kafka", "Airflow", "Spark", "Hadoop", "dbt", "Snowflake",
+  "Elasticsearch", "MongoDB", "PostgreSQL", "MySQL", "Redis", "RabbitMQ",
+
+  "AWS", "GCP", "Azure", "Lambda", "S3", "EC2",
+
+  "PyTorch", "TensorFlow", "scikit-learn", "Pandas", "NumPy",
+
+  "Go", "Golang", "Rust", "Ruby", "C++", "C#", ".NET"
+]
