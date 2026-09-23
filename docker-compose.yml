@@ -25,7 +25,13 @@ services:
 
   presidio-analyzer:
     build:
-      context: ./vendor/presidio/presidio-analyzer
+      # Extends the vendored analyzer with German support (see
+      # analyzer-multilingual/Dockerfile) rather than building the vendored
+      # Dockerfile directly — the vendored source is pulled in unmodified as
+      # the "presidio-source" additional context, never hand-edited.
+      context: ./analyzer-multilingual
+      additional_contexts:
+        presidio-source: ./vendor/presidio/presidio-analyzer
     environment:
       - PORT=5001
       # Only consulted if BasicLangExtractRecognizer is explicitly enabled

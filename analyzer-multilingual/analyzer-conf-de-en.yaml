@@ -1,0 +1,8 @@
+# vendor/presidio/presidio-analyzer/presidio_analyzer/conf/default_analyzer.yaml
+# restricts the API to `supported_languages: [en]` — a separate gate from
+# which NLP models are loaded. Requests with language: "de" are rejected
+# without this override, even once the German model is installed.
+supported_languages:
+  - en
+  - de
+default_score_threshold: 0

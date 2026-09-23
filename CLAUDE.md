@@ -56,15 +56,46 @@ FairHire pipeline │  gateway (:8080, the only host port)  │
   a real CV), which would blank out genuine technical content before scoring
   — this isn't a hypothetical, it's an observed failure mode. Extend
   `allow_list.json` as more false positives turn up in practice.
+- **Matching is case-sensitive exact-string by default** (Presidio's
+  `allow_list_match` param only supports `"exact"` or `"regex"`, no
+  case-insensitive mode) — confirmed against a real CV where `VBScript` in
+  the allow_list didn't suppress `Vbscript` in the actual text. Add the
+  casing variant that actually appears, don't assume one entry covers all
+  casings. Switching to `"regex"` mode would fix this globally but needs
+  every existing term re-escaped first (`C++`, `.NET`, `Next.js`, etc. all
+  contain regex metacharacters) — not done here, deliberately, as too risky
+  a change for this one gap.
 - **Ollama is optional and off by default.** It's only used by
   `BasicLangExtractRecognizer`, an LLM-based entity extractor that upstream
   ships **disabled** in its default recognizer config — core PII detection
-  runs on spaCy (`en_core_web_lg`), and `presidio-analyzer`'s `app.py` never
-  contacts Ollama at startup regardless. `docker-compose.yml` puts `ollama`
-  behind the `llm-extraction` Compose profile so a plain `docker compose up`
-  never starts it (and never conflicts with a native Ollama install already
-  using the host's port 11434). Only relevant if someone later reconfigures
-  the recognizer registry to turn that extractor on.
+  runs on spaCy, and `presidio-analyzer`'s `app.py` never contacts Ollama at
+  startup regardless. `docker-compose.yml` puts `ollama` behind the
+  `llm-extraction` Compose profile so a plain `docker compose up` never
+  starts it (and never conflicts with a native Ollama install already using
+  the host's port 11434). Only relevant if someone later reconfigures the
+  recognizer registry to turn that extractor on.
+- **German language support** (`de`, alongside `en`) is real and tested, not
+  aspirational — `presidio-analyzer` is built from `analyzer-multilingual/`
+  (own Dockerfile + `nlp-config-de-en.yaml` + `analyzer-conf-de-en.yaml`),
+  which layers `en_core_web_lg` + `de_core_news_lg` on top of the vendored
+  `vendor/presidio` source via Docker Compose `additional_contexts` — the
+  vendored submodule itself is never hand-edited. Confirmed against a real
+  `/analyze` call with `language: "de"`: `PERSON`, `LOCATION`,
+  `EMAIL_ADDRESS`, `PHONE_NUMBER`, and `DATE_TIME` all detect correctly in
+  German text, and `/anonymize` redacts them correctly too. Two confirmed
+  gaps specific to German:
+  - German job titles can be misread as `PERSON` (confirmed:
+    `Senior Softwareentwicklerin`) — same class of false positive as the
+    English tech-jargon one above, mitigated the same way (allow_list).
+  - The German spaCy model's label set (`PER`/`LOC`/`ORG`/`MISC`) has **no
+    NRP-equivalent label at all** — nationality (`deutsch` in a
+    `Staatsangehörigkeit` field) is not detected by anything, not even
+    weakly. This is a harder gap than the English `NRP` false-positive
+    problem: for German, nationality detection doesn't exist yet and needs a
+    custom recognizer, not an allow_list tweak. Also confirmed: German
+    tech-jargon (`Python`) lands under `MISC`, not `PERSON`/`NRP` — a
+    different bucket than English, add German false positives to
+    `allow_list.json` as they turn up, same as English ones.
 - `presidio-image-redactor` (in upstream's own compose file) is not deployed
   at all — FairHire's CVs are text, not images; unused services are just
   attack surface.

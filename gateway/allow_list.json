@@ -18,5 +18,16 @@
 
   "PyTorch", "TensorFlow", "scikit-learn", "Pandas", "NumPy",
 
-  "Go", "Golang", "Rust", "Ruby", "C++", "C#", ".NET"
+  "Go", "Golang", "Rust", "Ruby", "C++", "C#", ".NET",
+
+  "Agile", "Scrum", "Kanban", "Waterfall", "Sprint", "Jira", "Confluence",
+
+  "Selenium", "Cypress", "Appium", "Postman", "SoapUI", "TestRail",
+  "JUnit", "Pytest", "TestNG", "Cucumber", "JMeter", "Playwright",
+
+  "Scrum Master", "VBScript", "Vbscript", "Fiddler",
+
+  "Python",
+
+  "Senior Softwareentwicklerin"
 ]
